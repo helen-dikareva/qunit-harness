@@ -38,6 +38,7 @@ export default class Job {
     }
 
     async _getJobResult () {
+        console.log('!!!_getJobResult');
         this.status = Job.STATUSES.IN_PROGRESS;
 
         this.startTestsTime = new Date();
@@ -59,10 +60,15 @@ export default class Job {
 
     async _runWorker () {
         try {
+            console.log('call open browser');
             await open(this.browserInfo, `${this.options.startUrl[0]}?browserName=${encodeURIComponent(this.id)}`);
+            console.log('opening resolved');
 
             return new Promise(resolve => {
                 this.testServer.on('startedWorker', (browserName, id) => {
+                    console.log('startedWorker event catched');
+                    console.log('this.id = ' + this.id);
+                    console.log('browserName = ' + browserName);
                     if (this.id === browserName)
                         this.sessionID = id;
 
